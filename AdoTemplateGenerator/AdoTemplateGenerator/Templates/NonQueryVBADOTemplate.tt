@@ -1,0 +1,50 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Configuration" #>
+
+<#@ parameter name="procedureName" type="System.String" #>
+<#@ parameter name="connectionStringName" type="System.String" #>
+<#@ parameter name="dictionaryParameters" type="System.Collections.Generic.Dictionary`2[System.String,System.Tuple`2[System.String,System.Boolean]]" #>
+
+
+	public int Insert<#=procedureName#>(Model entity)
+	{
+		using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["<#=connectionStringName#>"].ConnectionString))
+        {
+            using (SqlCommand insertCommand = new SqlCommand("<#=procedureName#>", connection))
+            {
+				insertCommand.CommandType = CommandType.StoredProcedure;
+						<#
+						foreach(var item in dictionaryParameters)
+						{
+						if(item.Value.Item2)
+						{
+						#>
+				var <#=item.Key.Substring(1)#>output = new SqlParameter("<#= item.Key #>", <#=item.Value.Item1#>)
+                {
+                    Direction = ParameterDirection.Output
+                };
+				insertCommand.Parameters.Add(<#=item.Key.Substring(1)#>output);
+						<#
+						}
+						else
+						{
+						#>
+				insertCommand.Parameters.Add("<#= item.Key #>", <#= item.Value.Item1 #>).Value = (object)entity.<#= item.Key.Substring(1)#> ?? DBNull.Value;
+						<#
+						}
+                        }
+						#>
+				connection.Open();
+				var resultInsert = insertCommand.ExecuteNonQuery();
+				return resultInsert;
+			}
+		}
+	}
