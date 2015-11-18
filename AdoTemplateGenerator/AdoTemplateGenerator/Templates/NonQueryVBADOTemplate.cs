@@ -48,16 +48,16 @@ namespace AdoTemplateGenerator.Templates
             
             #line default
             #line hidden
-            this.Write("\"].ConnectionString))\r\n        {\r\n            using (SqlCommand insertCommand = n" +
-                    "ew SqlCommand(\"");
+            this.Write("\"].ConnectionString))\r\n        {\r\n            using (SqlCommand nonQueryCommand =" +
+                    " new SqlCommand(\"");
             
             #line 21 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
             
             #line default
             #line hidden
-            this.Write("\", connection))\r\n            {\r\n\t\t\t\tinsertCommand.CommandType = CommandType.Store" +
-                    "dProcedure;\r\n\t\t\t\t\t\t");
+            this.Write("\", connection))\r\n            {\r\n\t\t\t\tnonQueryCommand.CommandType = CommandType.Sto" +
+                    "redProcedure;\r\n\t\t\t\t\t\t");
             
             #line 24 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
 
@@ -91,7 +91,7 @@ namespace AdoTemplateGenerator.Templates
             #line default
             #line hidden
             this.Write(")\r\n                {\r\n                    Direction = ParameterDirection.Output\r\n" +
-                    "                };\r\n\t\t\t\tinsertCommand.Parameters.Add(");
+                    "                };\r\n\t\t\t\tnonQueryCommand.Parameters.Add(");
             
             #line 34 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(1)));
@@ -109,7 +109,7 @@ namespace AdoTemplateGenerator.Templates
             
             #line default
             #line hidden
-            this.Write("\t\t\t\tinsertCommand.Parameters.Add(\"");
+            this.Write("\t\t\t\tnonQueryCommand.Parameters.Add(\"");
             
             #line 40 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Key));
@@ -140,8 +140,8 @@ namespace AdoTemplateGenerator.Templates
             
             #line default
             #line hidden
-            this.Write("\t\t\t\tconnection.Open();\r\n\t\t\t\tvar resultInsert = insertCommand.ExecuteNonQuery();\r\n" +
-                    "\t\t\t\treturn resultInsert;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n");
+            this.Write("\t\t\t\tconnection.Open();\r\n\t\t\t\tvar resultInsert = nonQueryCommand.ExecuteNonQuery();" +
+                    "\r\n\t\t\t\treturn resultInsert;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n");
             return this.GenerationEnvironment.ToString();
         }
         

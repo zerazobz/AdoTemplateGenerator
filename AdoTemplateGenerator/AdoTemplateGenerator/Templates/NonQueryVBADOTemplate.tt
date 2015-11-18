@@ -18,9 +18,9 @@
 	{
 		using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["<#=connectionStringName#>"].ConnectionString))
         {
-            using (SqlCommand insertCommand = new SqlCommand("<#=procedureName#>", connection))
+            using (SqlCommand nonQueryCommand = new SqlCommand("<#=procedureName#>", connection))
             {
-				insertCommand.CommandType = CommandType.StoredProcedure;
+				nonQueryCommand.CommandType = CommandType.StoredProcedure;
 						<#
 						foreach(var item in dictionaryParameters)
 						{
@@ -31,19 +31,19 @@
                 {
                     Direction = ParameterDirection.Output
                 };
-				insertCommand.Parameters.Add(<#=item.Key.Substring(1)#>output);
+				nonQueryCommand.Parameters.Add(<#=item.Key.Substring(1)#>output);
 						<#
 						}
 						else
 						{
 						#>
-				insertCommand.Parameters.Add("<#= item.Key #>", <#= item.Value.Item1 #>).Value = (object)entity.<#= item.Key.Substring(1)#> ?? DBNull.Value;
+				nonQueryCommand.Parameters.Add("<#= item.Key #>", <#= item.Value.Item1 #>).Value = (object)entity.<#= item.Key.Substring(1)#> ?? DBNull.Value;
 						<#
 						}
                         }
 						#>
 				connection.Open();
-				var resultInsert = insertCommand.ExecuteNonQuery();
+				var resultInsert = nonQueryCommand.ExecuteNonQuery();
 				return resultInsert;
 			}
 		}

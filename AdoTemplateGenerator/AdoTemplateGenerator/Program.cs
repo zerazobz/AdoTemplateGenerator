@@ -26,7 +26,28 @@ namespace AdoTemplateGenerator
             }
             string connectionStringName = "ConnectionString";
             string storedProcedureName = args.GetValue(0).ToString();
+            string typeTemplate = args.GetValue(1).ToString();
 
+            string nonQueryResult = String.Empty;
+            string readerResult = String.Empty;
+
+            if (typeTemplate == "nq")
+                nonQueryResult = GetNonQueryResult(connectionStringName, storedProcedureName);
+            else if(typeTemplate == "re")
+                readerResult = GetReaderResult(connectionStringName, storedProcedureName);
+
+            var filePath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\", "Generated", $"{storedProcedureName}.sql"));
+
+            using (var writter = new StreamWriter(filePath, false))
+            {
+                writter.Write(nonQueryResult);
+            }
+
+            Console.ReadKey();
+        }
+
+        private static string GetNonQueryResult(string connectionStringName, string storedProcedureName)
+        {
             SqlConnectionStringBuilder connectionBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString);
 
             Server srv = new Server(connectionBuilder.DataSource);
@@ -53,7 +74,7 @@ namespace AdoTemplateGenerator
                 bool isOutPut = prmAnalized.IsOutputParameter;
 
                 System.Data.SqlDbType sqlDbType;
-                
+
                 if (internalSqlDataType.SqlDataType != SqlDataType.UserDefinedDataType)
                     sqlDbType = ConvertSqlTypeEnum(internalSqlDataType.SqlDataType);
                 else
@@ -64,7 +85,6 @@ namespace AdoTemplateGenerator
                 Console.WriteLine("{0} {1} {2} {3} {4} {5}", parameterName, internalSqlDataType, defaultValue, clrRealType, sqlDbType.GetFullName(), isOutPut);
             }
 
-
             NonQueryVBADOTemplate textTemplate = new NonQueryVBADOTemplate();
             textTemplate.Session = new Microsoft.VisualStudio.TextTemplating.TextTemplatingSession();
             textTemplate.Session["procedureName"] = storedProcedureName;
@@ -72,15 +92,32 @@ namespace AdoTemplateGenerator
             textTemplate.Session["dictionaryParameters"] = parametersToMap;
             textTemplate.Initialize();
             var resultTemplate = textTemplate.TransformText();
+            return resultTemplate;
+        }
 
-            var filePath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\", "Generated", $"{storedProcedureName}.sql"));
-
-            using (var writter = new StreamWriter(filePath, false))
+        private static string GetReaderResult(string connecionStringName, string storedProcedureName)
+        {
+            StringBuilder resultBuilder = new StringBuilder();
+            SqlConnection readerConnection = new SqlConnection(ConfigurationManager.ConnectionStrings[connecionStringName].ConnectionString);
+            using (var readerCommand = new SqlCommand(storedProcedureName, readerConnection))
             {
-                writter.Write(resultTemplate);
-            }
+                readerCommand.CommandType = CommandType.StoredProcedure;
+                readerConnection.Open();
 
-            Console.ReadKey();
+                using (var sqlReader = readerCommand.ExecuteReader(CommandBehavior.KeyInfo))
+                {
+                    var schemaTable = sqlReader.GetSchemaTable();
+                    foreach (DataRow iRow in schemaTable.Rows)
+                    {
+                        foreach (DataColumn iColumn in schemaTable.Columns)
+                        {
+                            resultBuilder.AppendLine(String.Format("Nombre de Columna: {0}, Valor: {1}", iColumn.ColumnName, iRow[iColumn].ToString()));
+                            Console.WriteLine("Nombre de Columna: {0}, Valor: {1}", iColumn.ColumnName, iRow[iColumn].ToString());
+                        }
+                    }
+                }
+                return resultBuilder.ToString();
+            }
         }
 
         private static SqlDbType GetSqlType(string realType)
