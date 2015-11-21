@@ -48,6 +48,65 @@ namespace AdoTemplateGenerator
 
         private static string GetNonQueryResult(string connectionStringName, string storedProcedureName)
         {
+            var parametersDictionary = GetparametersDictionary(connectionStringName, storedProcedureName);
+
+            Dictionary<string, Tuple<string, bool>> parametersToMap = parametersDictionary.Select(prmKVP => new KeyValuePair<string, Tuple<string, bool>>(prmKVP.Key, new Tuple<string, bool>(prmKVP.Value.Item1.GetFullName(), prmKVP.Value.Item2))).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+            NonQueryVBADOTemplate textTemplate = new NonQueryVBADOTemplate();
+            textTemplate.Session = new Microsoft.VisualStudio.TextTemplating.TextTemplatingSession();
+            textTemplate.Session["procedureName"] = storedProcedureName;
+            textTemplate.Session["connectionStringName"] = connectionStringName;
+            textTemplate.Session["dictionaryParameters"] = parametersToMap;
+            textTemplate.Initialize();
+            var resultTemplate = textTemplate.TransformText();
+            return resultTemplate;
+        }
+
+        private static string GetReaderResult(string connecionStringName, string storedProcedureName)
+        {
+            StringBuilder resultBuilder = new StringBuilder();
+            SqlConnection readerConnection = new SqlConnection(ConfigurationManager.ConnectionStrings[connecionStringName].ConnectionString);
+            var storedProcedureParameters = GetparametersDictionary(connecionStringName, storedProcedureName);
+
+            using (var readerCommand = new SqlCommand(storedProcedureName, readerConnection))
+            {
+                foreach (var iParameter in storedProcedureParameters)
+                {
+                    if (!iParameter.Value.Item2)
+                    {
+                        readerCommand.Parameters.Add(new SqlParameter(iParameter.Key, DBNull.Value));
+                    }
+                    else
+                    {
+                        //output
+                    }
+                }
+
+                readerCommand.CommandType = CommandType.StoredProcedure;
+                readerConnection.Open();
+                using (var sqlReader = readerCommand.ExecuteReader(CommandBehavior.KeyInfo))
+                //using (var sqlReader = readerCommand.ExecuteReader(CommandBehavior.SchemaOnly))
+                {
+                    var schemaTable = sqlReader.GetSchemaTable();
+                    foreach (DataRow iRow in schemaTable.Rows)
+                    {
+                        Console.WriteLine("***Nuevo Row***");
+                        foreach (DataColumn iColumn in schemaTable.Columns)
+                        {
+                            resultBuilder.AppendLine(String.Format("Nombre de Valor: {0}, Valor: {1}, Columna: {2}", iColumn.ColumnName, iRow[iColumn].ToString(), iRow["columnName"].ToString()));
+                            Console.WriteLine("Nombre de Columna: {0}, Valor: {1}, Columna: {2}", iColumn.ColumnName, iRow[iColumn].ToString(), iRow["columnName"].ToString());
+                        }
+                        Console.WriteLine("");
+                    }
+                }
+                return resultBuilder.ToString();
+            }
+        }
+
+        private static Dictionary<string, Tuple<SqlDbType, bool>> GetparametersDictionary(string connectionStringName, string storedProcedureName)
+        {
+            Dictionary<string, Tuple<SqlDbType, bool>> dictionaryResult = new Dictionary<string, Tuple<SqlDbType, bool>>();
+
             SqlConnectionStringBuilder connectionBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString);
 
             Server srv = new Server(connectionBuilder.DataSource);
@@ -60,8 +119,6 @@ namespace AdoTemplateGenerator
             var dsfs = db.StoredProcedures;
             var storedProcedure = db.StoredProcedures[storedProcedureName];
             var storedProcedureParameters = storedProcedure.Parameters;
-
-            Dictionary<string, Tuple<string, bool>> parametersToMap = new Dictionary<string, Tuple<string, bool>>();
 
             foreach (var iParam in storedProcedureParameters)
             {
@@ -80,45 +137,13 @@ namespace AdoTemplateGenerator
                 else
                     sqlDbType = GetSqlType(clrRealType);
 
-                parametersToMap.Add(parameterName, new Tuple<string, bool>(sqlDbType.GetFullName(), isOutPut));
-
-                Console.WriteLine("{0} {1} {2} {3} {4} {5}", parameterName, internalSqlDataType, defaultValue, clrRealType, sqlDbType.GetFullName(), isOutPut);
+                dictionaryResult.Add(parameterName, new Tuple<SqlDbType, bool>(sqlDbType, isOutPut));
+                Console.WriteLine("Parametros: \t{0} {1} {2} {3} {4} {5}", parameterName, internalSqlDataType, defaultValue, clrRealType, sqlDbType.GetFullName(), isOutPut);
             }
 
-            NonQueryVBADOTemplate textTemplate = new NonQueryVBADOTemplate();
-            textTemplate.Session = new Microsoft.VisualStudio.TextTemplating.TextTemplatingSession();
-            textTemplate.Session["procedureName"] = storedProcedureName;
-            textTemplate.Session["connectionStringName"] = connectionStringName;
-            textTemplate.Session["dictionaryParameters"] = parametersToMap;
-            textTemplate.Initialize();
-            var resultTemplate = textTemplate.TransformText();
-            return resultTemplate;
+            return dictionaryResult;
         }
 
-        private static string GetReaderResult(string connecionStringName, string storedProcedureName)
-        {
-            StringBuilder resultBuilder = new StringBuilder();
-            SqlConnection readerConnection = new SqlConnection(ConfigurationManager.ConnectionStrings[connecionStringName].ConnectionString);
-            using (var readerCommand = new SqlCommand(storedProcedureName, readerConnection))
-            {
-                readerCommand.CommandType = CommandType.StoredProcedure;
-                readerConnection.Open();
-
-                using (var sqlReader = readerCommand.ExecuteReader(CommandBehavior.KeyInfo))
-                {
-                    var schemaTable = sqlReader.GetSchemaTable();
-                    foreach (DataRow iRow in schemaTable.Rows)
-                    {
-                        foreach (DataColumn iColumn in schemaTable.Columns)
-                        {
-                            resultBuilder.AppendLine(String.Format("Nombre de Columna: {0}, Valor: {1}", iColumn.ColumnName, iRow[iColumn].ToString()));
-                            Console.WriteLine("Nombre de Columna: {0}, Valor: {1}", iColumn.ColumnName, iRow[iColumn].ToString());
-                        }
-                    }
-                }
-                return resultBuilder.ToString();
-            }
-        }
 
         private static SqlDbType GetSqlType(string realType)
         {
