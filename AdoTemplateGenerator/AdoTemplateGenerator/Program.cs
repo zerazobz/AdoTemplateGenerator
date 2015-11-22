@@ -36,7 +36,11 @@ namespace AdoTemplateGenerator
             else if (typeTemplate == "re")
                 textResult = GetReaderResult(connectionStringName, storedProcedureName);
 
-            var filePath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\", "Generated", $"{storedProcedureName}.sql"));
+            var directoryPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\", "Generatedv2"));
+            if (!Directory.Exists(directoryPath))
+                Directory.CreateDirectory(directoryPath);
+
+            var filePath = Path.GetFullPath(Path.Combine(directoryPath, $"{storedProcedureName}.sql"));
 
             using (var writter = new StreamWriter(filePath, false))
             {
