@@ -150,9 +150,9 @@ foreach(var item in dictionaryParameters)
 						obj = Activator.CreateInstance<T>();
 						foreach (PropertyInfo prop in obj.GetType().GetProperties())
 						{
-							if (!object.Equals(dr[prop.Name], DBNull.Value))
+							if (!object.Equals(reader[prop.Name], DBNull.Value))
 							{
-								prop.SetValue(obj, dr[prop.Name], null);
+								prop.SetValue(obj, reader[prop.Name], null);
 							}
 						}
 						resultSet.Add(obj);
