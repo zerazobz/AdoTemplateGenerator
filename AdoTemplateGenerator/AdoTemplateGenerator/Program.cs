@@ -12,6 +12,7 @@ using System.Data;
 using AdoTemplateGenerator.Helpers;
 using AdoTemplateGenerator.Templates;
 using AdoTemplateGenerator.Models;
+using System.Reflection;
 
 namespace AdoTemplateGenerator
 {
@@ -36,7 +37,7 @@ namespace AdoTemplateGenerator
             else if (typeTemplate == "re")
                 textResult = GetReaderResult(connectionStringName, storedProcedureName);
 
-            var directoryPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\", "Generatedv2"));
+            var directoryPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\", "Generated"));
             if (!Directory.Exists(directoryPath))
                 Directory.CreateDirectory(directoryPath);
 
@@ -56,7 +57,7 @@ namespace AdoTemplateGenerator
         private static string GetNonQueryResult(string connectionStringName, string storedProcedureName)
         {
             var parametersDictionary = GetStoredProcedureParametersDictionary(connectionStringName, storedProcedureName);
-            Dictionary<string, Tuple<string, bool>> parametersToMap = parametersDictionary.Select(prmKVP => new KeyValuePair<string, Tuple<string, bool>>(prmKVP.Key, new Tuple<string, bool>(prmKVP.Value.Item1.GetFullName(), prmKVP.Value.Item2))).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            Dictionary<string, Tuple<string, bool, string>> parametersToMap = parametersDictionary.Select(prmKVP => new KeyValuePair<string, Tuple<string, bool, string>>(prmKVP.Key, new Tuple<string, bool, string>(prmKVP.Value.Item1.GetFullName(), prmKVP.Value.Item2, prmKVP.Value.Item3))).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
             NonQueryVBADOTemplate textTemplate = new NonQueryVBADOTemplate();
             textTemplate.Session = new Microsoft.VisualStudio.TextTemplating.TextTemplatingSession();
@@ -84,7 +85,7 @@ namespace AdoTemplateGenerator
             return resulTemplate;
         }
 
-        private static Tuple<Dictionary<string, Tuple<SqlDbType, bool>>, Dictionary<string, ReaderColumnModel>> GetReaderColumnsDictionary(string connectionStringName, string storedProcedureName)
+        private static Tuple<Dictionary<string, Tuple<SqlDbType, bool, string>>, Dictionary<string, ReaderColumnModel>> GetReaderColumnsDictionary(string connectionStringName, string storedProcedureName)
         {
             Dictionary<string, ReaderColumnModel> resultColumnsForReader = new Dictionary<string, ReaderColumnModel>();
 
@@ -168,12 +169,12 @@ namespace AdoTemplateGenerator
                     }
                 }
             }
-            return new Tuple<Dictionary<string, Tuple<SqlDbType, bool>>, Dictionary<string, ReaderColumnModel>>(storedProcedureParameters, resultColumnsForReader);
+            return new Tuple<Dictionary<string, Tuple<SqlDbType, bool, string>>, Dictionary<string, ReaderColumnModel>>(storedProcedureParameters, resultColumnsForReader);
         }
 
-        private static Dictionary<string, Tuple<SqlDbType, bool>> GetStoredProcedureParametersDictionary(string connectionStringName, string storedProcedureName)
+        private static Dictionary<string, Tuple<SqlDbType, bool, string>> GetStoredProcedureParametersDictionary(string connectionStringName, string storedProcedureName)
         {
-            Dictionary<string, Tuple<SqlDbType, bool>> dictionaryResult = new Dictionary<string, Tuple<SqlDbType, bool>>();
+            Dictionary<string, Tuple<SqlDbType, bool, string>> dictionaryResult = new Dictionary<string, Tuple<SqlDbType, bool, string>>();
 
             SqlConnectionStringBuilder connectionBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString);
 
@@ -200,7 +201,6 @@ namespace AdoTemplateGenerator
                 string parameterName = prmAnalized.Name;
                 var internalSqlDataType = prmAnalized.DataType;
                 object defaultValue = prmAnalized.DefaultValue;
-                //string clrRealType = prmAnalized.Properties[0].Type.FullName;
                 bool isOutPut = prmAnalized.IsOutputParameter;
 
                 System.Data.SqlDbType sqlDbType;
@@ -212,8 +212,15 @@ namespace AdoTemplateGenerator
                     var currentUserDefinedDataType = db.UserDefinedDataTypes[internalSqlDataType.Name];
                     sqlDbType = (SqlDbType)Enum.Parse(typeof(SqlDbType), currentUserDefinedDataType.SystemType, true);
                 }
+                var clrType = GetCLRTypeFromSqlType(sqlDbType);
+                var dataTypeCompleteName = String.Empty;
+                var underLyingType = Nullable.GetUnderlyingType(clrType);
+                if (underLyingType != null)
+                    dataTypeCompleteName = $"System.Nullable<{underLyingType.FullName}>";
+                else
+                    dataTypeCompleteName = clrType.FullName;
 
-                dictionaryResult.Add(parameterName, new Tuple<SqlDbType, bool>(sqlDbType, isOutPut));
+                dictionaryResult.Add(parameterName, new Tuple<SqlDbType, bool, string>(sqlDbType, isOutPut, dataTypeCompleteName));
                 Console.WriteLine($"\t{parameterName, -15}\t{internalSqlDataType, -10}\t{defaultValue, -10}\t{sqlDbType.GetFullName()}\t{isOutPut} ");
             }
 
@@ -283,6 +290,76 @@ namespace AdoTemplateGenerator
                 return typeof(Nullable<>).MakeGenericType(type);
             else
                 return type;
+        }
+
+        private static Type GetCLRTypeFromSqlType(SqlDbType sqlType)
+        {
+            switch (sqlType)
+            {
+                case SqlDbType.BigInt:
+                    return typeof(long?);
+
+                case SqlDbType.Binary:
+                case SqlDbType.Image:
+                case SqlDbType.Timestamp:
+                case SqlDbType.VarBinary:
+                    return typeof(byte[]);
+
+                case SqlDbType.Bit:
+                    return typeof(bool?);
+
+                case SqlDbType.Char:
+                case SqlDbType.NChar:
+                case SqlDbType.NText:
+                case SqlDbType.NVarChar:
+                case SqlDbType.Text:
+                case SqlDbType.VarChar:
+                case SqlDbType.Xml:
+                    return typeof(string);
+
+                case SqlDbType.DateTime:
+                case SqlDbType.SmallDateTime:
+                case SqlDbType.Date:
+                case SqlDbType.Time:
+                case SqlDbType.DateTime2:
+                    return typeof(DateTime?);
+
+                case SqlDbType.Decimal:
+                case SqlDbType.Money:
+                case SqlDbType.SmallMoney:
+                    return typeof(decimal?);
+
+                case SqlDbType.Float:
+                    return typeof(double?);
+
+                case SqlDbType.Int:
+                    return typeof(int?);
+
+                case SqlDbType.Real:
+                    return typeof(float?);
+
+                case SqlDbType.UniqueIdentifier:
+                    return typeof(Guid?);
+
+                case SqlDbType.SmallInt:
+                    return typeof(short?);
+
+                case SqlDbType.TinyInt:
+                    return typeof(byte?);
+
+                case SqlDbType.Variant:
+                case SqlDbType.Udt:
+                    return typeof(object);
+
+                case SqlDbType.Structured:
+                    return typeof(DataTable);
+
+                case SqlDbType.DateTimeOffset:
+                    return typeof(DateTimeOffset?);
+
+                default:
+                    throw new ArgumentOutOfRangeException("sqlType");
+            }
         }
     }
 }

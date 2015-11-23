@@ -30,11 +30,11 @@ foreach(var item in dictionaryParameters)
 	if(item.Value.Item2)
 	{
 #>
-				var <#=item.Key.Substring(3)#>output = new SqlParameter("<#= item.Key #>", <#=item.Value.Item1#>)
+				var <#=item.Key.Substring(4)#>output = new SqlParameter("<#= item.Key #>", <#=item.Value.Item1#>)
                 {
                     Direction = ParameterDirection.Output
                 };
-				readerCommand.Parameters.Add(<#=item.Key.Substring(3)#>output);
+				readerCommand.Parameters.Add(<#=item.Key.Substring(4)#>output);
 <#
 	}
 	else

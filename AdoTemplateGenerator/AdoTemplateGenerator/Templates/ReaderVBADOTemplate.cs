@@ -73,7 +73,7 @@ foreach(var item in dictionaryParameters)
             this.Write("\t\t\t\tvar ");
             
             #line 33 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderVBADOTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(3)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
             
             #line default
             #line hidden
@@ -95,7 +95,7 @@ foreach(var item in dictionaryParameters)
                     "                };\r\n\t\t\t\treaderCommand.Parameters.Add(");
             
             #line 37 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderVBADOTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(3)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
             
             #line default
             #line hidden

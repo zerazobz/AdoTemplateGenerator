@@ -57,22 +57,22 @@ namespace AdoTemplateGenerator.Templates
             #line default
             #line hidden
             this.Write("\", connection))\r\n            {\r\n\t\t\t\tnonQueryCommand.CommandType = CommandType.Sto" +
-                    "redProcedure;\r\n\t\t\t\t\t\t");
+                    "redProcedure;\r\n");
             
             #line 22 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
 
-						foreach(var item in dictionaryParameters)
-						{
-						if(item.Value.Item2)
-						{
-						
+foreach(var item in dictionaryParameters)
+{
+	if(item.Value.Item2)
+	{
+
             
             #line default
             #line hidden
             this.Write("\t\t\t\tvar ");
             
             #line 28 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(3)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
             
             #line default
             #line hidden
@@ -94,18 +94,18 @@ namespace AdoTemplateGenerator.Templates
                     "                };\r\n\t\t\t\tnonQueryCommand.Parameters.Add(");
             
             #line 32 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(3)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
             
             #line default
             #line hidden
-            this.Write("output);\r\n\t\t\t\t\t\t");
+            this.Write("output);\r\n");
             
             #line 33 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
 
-						}
-						else
-						{
-						
+	}
+	else
+	{
+
             
             #line default
             #line hidden
@@ -126,22 +126,55 @@ namespace AdoTemplateGenerator.Templates
             this.Write(").Value = (object)entity.");
             
             #line 38 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(3)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
             
             #line default
             #line hidden
-            this.Write(" ?? DBNull.Value;\r\n\t\t\t\t\t\t");
+            this.Write(" ?? DBNull.Value;\r\n");
             
             #line 39 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
 
-						}
-                        }
-						
+	}
+}
+
             
             #line default
             #line hidden
             this.Write("\t\t\t\tconnection.Open();\r\n\t\t\t\tvar resultNonQuery = nonQueryCommand.ExecuteNonQuery(" +
-                    ");\r\n\t\t\t\treturn resultNonQuery;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n");
+                    ");\r\n\t\t\t\treturn resultNonQuery;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\r\n\r\n\tpublic class Model\r\n\t{\r\n");
+            
+            #line 53 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+
+foreach(var item in dictionaryParameters)
+{
+
+            
+            #line default
+            #line hidden
+            this.Write("\t\tpublic ");
+            
+            #line 57 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Value.Item3));
+            
+            #line default
+            #line hidden
+            this.Write(" ");
+            
+            #line 57 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
+            
+            #line default
+            #line hidden
+            this.Write(" { get; set; }\r\n");
+            
+            #line 58 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+
+}
+
+            
+            #line default
+            #line hidden
+            this.Write("\t}");
             return this.GenerationEnvironment.ToString();
         }
         
@@ -173,12 +206,12 @@ private string connectionStringName
     }
 }
 
-private global::System.Collections.Generic.Dictionary<string, System.Tuple<string, bool>> _dictionaryParametersField;
+private global::System.Collections.Generic.Dictionary<string, System.Tuple<string, bool, string>> _dictionaryParametersField;
 
 /// <summary>
 /// Access the dictionaryParameters parameter of the template.
 /// </summary>
-private global::System.Collections.Generic.Dictionary<string, System.Tuple<string, bool>> dictionaryParameters
+private global::System.Collections.Generic.Dictionary<string, System.Tuple<string, bool, string>> dictionaryParameters
 {
     get
     {
@@ -225,7 +258,7 @@ if ((connectionStringNameValueAcquired == false))
 bool dictionaryParametersValueAcquired = false;
 if (this.Session.ContainsKey("dictionaryParameters"))
 {
-    this._dictionaryParametersField = ((global::System.Collections.Generic.Dictionary<string, System.Tuple<string, bool>>)(this.Session["dictionaryParameters"]));
+    this._dictionaryParametersField = ((global::System.Collections.Generic.Dictionary<string, System.Tuple<string, bool, string>>)(this.Session["dictionaryParameters"]));
     dictionaryParametersValueAcquired = true;
 }
 if ((dictionaryParametersValueAcquired == false))
@@ -233,7 +266,7 @@ if ((dictionaryParametersValueAcquired == false))
     object data = global::System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("dictionaryParameters");
     if ((data != null))
     {
-        this._dictionaryParametersField = ((global::System.Collections.Generic.Dictionary<string, System.Tuple<string, bool>>)(data));
+        this._dictionaryParametersField = ((global::System.Collections.Generic.Dictionary<string, System.Tuple<string, bool, string>>)(data));
     }
 }
 

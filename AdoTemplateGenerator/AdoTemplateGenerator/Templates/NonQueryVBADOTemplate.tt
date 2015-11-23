@@ -10,7 +10,7 @@
 
 <#@ parameter name="procedureName" type="System.String" #>
 <#@ parameter name="connectionStringName" type="System.String" #>
-<#@ parameter name="dictionaryParameters" type="System.Collections.Generic.Dictionary`2[System.String,System.Tuple`2[System.String,System.Boolean]]" #>
+<#@ parameter name="dictionaryParameters" type="System.Collections.Generic.Dictionary`2[System.String,System.Tuple`3[System.String,System.Boolean, System.String]]" #>
 
 	public int NonQuery<#=procedureName#>(Model entity)
 	{
@@ -19,30 +19,43 @@
             using (SqlCommand nonQueryCommand = new SqlCommand("<#=procedureName#>", connection))
             {
 				nonQueryCommand.CommandType = CommandType.StoredProcedure;
-						<#
-						foreach(var item in dictionaryParameters)
-						{
-						if(item.Value.Item2)
-						{
-						#>
-				var <#=item.Key.Substring(3)#>output = new SqlParameter("<#= item.Key #>", <#=item.Value.Item1#>)
+<#
+foreach(var item in dictionaryParameters)
+{
+	if(item.Value.Item2)
+	{
+#>
+				var <#=item.Key.Substring(4)#>output = new SqlParameter("<#= item.Key #>", <#=item.Value.Item1#>)
                 {
                     Direction = ParameterDirection.Output
                 };
-				nonQueryCommand.Parameters.Add(<#=item.Key.Substring(3)#>output);
-						<#
-						}
-						else
-						{
-						#>
-				nonQueryCommand.Parameters.Add("<#= item.Key #>", <#= item.Value.Item1 #>).Value = (object)entity.<#= item.Key.Substring(3)#> ?? DBNull.Value;
-						<#
-						}
-                        }
-						#>
+				nonQueryCommand.Parameters.Add(<#=item.Key.Substring(4)#>output);
+<#
+	}
+	else
+	{
+#>
+				nonQueryCommand.Parameters.Add("<#= item.Key #>", <#= item.Value.Item1 #>).Value = (object)entity.<#= item.Key.Substring(4)#> ?? DBNull.Value;
+<#
+	}
+}
+#>
 				connection.Open();
 				var resultNonQuery = nonQueryCommand.ExecuteNonQuery();
 				return resultNonQuery;
 			}
 		}
+	}
+
+
+	public class Model
+	{
+<#
+foreach(var item in dictionaryParameters)
+{
+#>
+		public <#=item.Value.Item3#> <#=item.Key.Substring(4)#> { get; set; }
+<#
+}
+#>
 	}
