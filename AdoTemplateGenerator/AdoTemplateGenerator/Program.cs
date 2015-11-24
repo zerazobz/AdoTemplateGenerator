@@ -72,7 +72,7 @@ namespace AdoTemplateGenerator
         private static string GetReaderResult(string connectionStringName, string storedProcedureName)
         {
             var readerResult = GetReaderColumnsDictionary(connectionStringName, storedProcedureName);
-            Dictionary<string, Tuple<string, bool>> parametersToMap = readerResult.Item1.Select(prmKVP => new KeyValuePair<string, Tuple<string, bool>>(prmKVP.Key, new Tuple<string, bool>(prmKVP.Value.Item1.GetFullName(), prmKVP.Value.Item2))).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            Dictionary<string, Tuple<string, bool, string>> parametersToMap = readerResult.Item1.Select(prmKVP => new KeyValuePair<string, Tuple<string, bool, string>>(prmKVP.Key, new Tuple<string, bool, string>(prmKVP.Value.Item1.GetFullName(), prmKVP.Value.Item2, prmKVP.Value.Item3))).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
             ReaderVBADOTemplate textTemplate = new ReaderVBADOTemplate();
             textTemplate.Session = new Microsoft.VisualStudio.TextTemplating.TextTemplatingSession();
