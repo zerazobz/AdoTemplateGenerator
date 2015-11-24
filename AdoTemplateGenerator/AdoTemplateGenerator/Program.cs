@@ -134,8 +134,10 @@ namespace AdoTemplateGenerator
                             var underLyingType = Nullable.GetUnderlyingType(dataType);
                             if(underLyingType != null)
                             {
-                                dataTypeFullName = $"System.Nullable<{underLyingType.FullName}>";
-                                dataTypeName = $"Nullable<{underLyingType.Name}>";
+                                //dataTypeFullName = $"System.Nullable<{underLyingType.FullName}>";
+                                //dataTypeName = $"Nullable<{underLyingType.Name}>";
+                                dataTypeFullName = $"System.Nullable(Of {underLyingType.FullName})";
+                                dataTypeName = $"Nullable(Of {underLyingType.Name})";
                             }
                             else
                             {
@@ -216,7 +218,8 @@ namespace AdoTemplateGenerator
                 var dataTypeCompleteName = String.Empty;
                 var underLyingType = Nullable.GetUnderlyingType(clrType);
                 if (underLyingType != null)
-                    dataTypeCompleteName = $"System.Nullable<{underLyingType.FullName}>";
+                    dataTypeCompleteName = $"System.Nullable(Of {underLyingType.FullName})";
+                //dataTypeCompleteName = $"System.Nullable<{underLyingType.FullName}>";
                 else
                     dataTypeCompleteName = clrType.FullName;
 

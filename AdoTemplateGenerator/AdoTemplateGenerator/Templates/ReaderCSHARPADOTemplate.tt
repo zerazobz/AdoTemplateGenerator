@@ -1,0 +1,140 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+
+<#@ import namespace="System.Data.SqlClient" #>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Configuration" #>
+<#@ import namespace="AdoTemplateGenerator.Models" #>
+
+<#@ parameter name="procedureName" type="System.String" #>
+<#@ parameter name="connectionStringName" type="System.String" #>
+<#@ parameter name="dictionaryParameters" type="System.Collections.Generic.Dictionary`2[System.String,System.Tuple`2[System.String,System.Boolean]]" #>
+<#@ parameter name="dictionaryColumns" type="System.Collections.Generic.Dictionary`2[System.String,AdoTemplateGenerator.Models.ReaderColumnModel]" #>
+
+
+	public List<T> NonQuery<#=procedureName#>(Model entity)
+	{
+		List<T> resultSet = new List<T>();
+
+		using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["<#=connectionStringName#>"].ConnectionString))
+        {
+            using (SqlCommand readerCommand = new SqlCommand("<#=procedureName#>", connection))
+            {
+				readerCommand.CommandType = CommandType.StoredProcedure;
+<#
+foreach(var item in dictionaryParameters)
+{
+	if(item.Value.Item2)
+	{
+#>
+				var <#=item.Key.Substring(4)#>output = new SqlParameter("<#= item.Key #>", <#=item.Value.Item1#>)
+                {
+                    Direction = ParameterDirection.Output
+                };
+				readerCommand.Parameters.Add(<#=item.Key.Substring(4)#>output);
+<#
+	}
+	else
+	{
+#>
+				readerCommand.Parameters.Add("<#= item.Key #>", <#= item.Value.Item1 #>).Value = (object)entity.<#= item.Key.Substring(4)#> ?? DBNull.Value;
+<#
+	}
+}
+#>
+				connection.Open();
+				using (var reader = selectCommand.ExecuteReader())
+                {
+					T obj = default(T);
+					while (reader.Read())
+                    {
+						obj = Activator.CreateInstance<T>();
+						foreach (PropertyInfo prop in obj.GetType().GetProperties())
+						{
+							if (!object.Equals(reader[prop.Name], DBNull.Value))
+							{
+								prop.SetValue(obj, reader[prop.Name], null);
+							}
+						}
+						resultSet.Add(obj);
+					}
+				}
+				return resultSet;
+			}
+		}
+	}
+
+
+	
+	public class ResultSetModel
+	{
+<#
+foreach(var iKeyValuePairColumnInfo in dictionaryColumns)
+{
+#>
+		public <#=iKeyValuePairColumnInfo.Value.DataTypeFullName#> <#=iKeyValuePairColumnInfo.Key#> { get; set; }
+<#
+}
+#>
+	}
+	
+	$("#").jtable({
+		title: '<#=procedureName#>',
+		paging: true,
+        pageSize: 10,
+        sorting: true,
+        defaultSorting: '<#=dictionaryColumns.Select(kvp => kvp.Key).FirstOrDefault() #> ASC',
+		actions: {
+			listAction: '',
+			createAction: '',
+			editAction: '',
+			deleteAction: '',
+		},
+		fields: {
+<#
+for (int i = 0; i < dictionaryColumns.Count; i++)
+{
+	var kvp = dictionaryColumns.ElementAt(i);
+	if(i == 0)
+    {
+#>
+			<#=kvp.Key #>: {
+				key: true,
+				list: false,
+				edit: false,
+				create: false
+			},
+<#
+	}
+	else if(i < dictionaryColumns.Count)
+	{
+#>
+			<#=kvp.Key#>: {
+				title: '<#=kvp.Key#>',
+				list: false,
+				edit: false,
+				create: false
+			},
+<#
+    }
+	else
+    {
+#>
+			<#=kvp.Key#>: {
+				title: '<#=kvp.Key#>',
+				list: false,
+				edit: false,
+				create: false
+			}
+<#
+    }
+}
+#>
+		}
+	});
+
+
+

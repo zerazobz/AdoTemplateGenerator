@@ -21,9 +21,9 @@ namespace AdoTemplateGenerator.Templates
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+    #line 1 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    public partial class NonQueryVBADOTemplate : NonQueryVBADOTemplateBase
+    public partial class NonQueryCSHARPADOTemplate : NonQueryCSHARPADOTemplateBase
     {
 #line hidden
         /// <summary>
@@ -33,51 +33,74 @@ namespace AdoTemplateGenerator.Templates
         {
             this.Write("\r\n");
             this.Write("\r\n");
-            this.Write("\r\n\r\n\tPublic Function cn");
+            this.Write("\r\n\tpublic int NonQuery");
             
-            #line 16 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 15 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
             
             #line default
             #line hidden
-            this.Write("(ByVal entity As Model) As Integer\r\n\t\tReturn _objDatos.cd");
+            this.Write("(Model entity)\r\n\t{\r\n\t\tusing (SqlConnection connection = new SqlConnection(Configu" +
+                    "rationManager.ConnectionStrings[\"");
             
-            #line 17 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 17 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(connectionStringName));
+            
+            #line default
+            #line hidden
+            this.Write("\"].ConnectionString))\r\n        {\r\n            using (SqlCommand nonQueryCommand =" +
+                    " new SqlCommand(\"");
+            
+            #line 19 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
             
             #line default
             #line hidden
-            this.Write("(entity)\r\n\tEnd Function\r\n\r\n\tPublic Function cd");
+            this.Write("\", connection))\r\n            {\r\n\t\t\t\tnonQueryCommand.CommandType = CommandType.Sto" +
+                    "redProcedure;\r\n");
             
-            #line 20 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
-            
-            #line default
-            #line hidden
-            this.Write("(ByVal entity As Model) As Integer\r\n\t\tReDim campoParam(");
-            
-            #line 21 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dictionaryParameters.Count() - 1));
-            
-            #line default
-            #line hidden
-            this.Write(")\r\n\t\tlistParam.Clear()\r\n\t\t\r\n");
-            
-            #line 24 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 22 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
 
-int iIndex = 0;
 foreach(var item in dictionaryParameters)
 {
 	if(item.Value.Item2)
 	{
-		
 
             
             #line default
             #line hidden
-            this.Write("\t\t\'Does not exists output parameters\r\n");
+            this.Write("\t\t\t\tvar ");
             
-            #line 33 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 28 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
+            
+            #line default
+            #line hidden
+            this.Write("output = new SqlParameter(\"");
+            
+            #line 28 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key));
+            
+            #line default
+            #line hidden
+            this.Write("\", ");
+            
+            #line 28 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Value.Item1));
+            
+            #line default
+            #line hidden
+            this.Write(")\r\n                {\r\n                    Direction = ParameterDirection.Output\r\n" +
+                    "                };\r\n\t\t\t\tnonQueryCommand.Parameters.Add(");
+            
+            #line 32 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
+            
+            #line default
+            #line hidden
+            this.Write("output);\r\n");
+            
+            #line 33 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
 
 	}
 	else
@@ -86,37 +109,30 @@ foreach(var item in dictionaryParameters)
             
             #line default
             #line hidden
-            this.Write("\t\tcampoParam(");
+            this.Write("\t\t\t\tnonQueryCommand.Parameters.Add(\"");
             
-            #line 38 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(iIndex++));
-            
-            #line default
-            #line hidden
-            this.Write(") = New SqlParameter(\"");
-            
-            #line 38 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 38 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Key));
             
             #line default
             #line hidden
-            this.Write("\", If(Not CType(entity.");
+            this.Write("\", ");
             
-            #line 38 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 38 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Value.Item1));
+            
+            #line default
+            #line hidden
+            this.Write(").Value = (object)entity.");
+            
+            #line 38 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
             
             #line default
             #line hidden
-            this.Write(", Object) Is Nothing, CType(entity.");
+            this.Write(" ?? DBNull.Value;\r\n");
             
-            #line 38 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
-            
-            #line default
-            #line hidden
-            this.Write(", Object), DBNull.Value))\r\n");
-            
-            #line 39 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 39 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
 
 	}
 }
@@ -124,17 +140,10 @@ foreach(var item in dictionaryParameters)
             
             #line default
             #line hidden
-            this.Write("\t\tFor Each iParam In campoParam\r\n            listParam.Add(iParam)\r\n        Next\r" +
-                    "\n\r\n        Return _objConexion.pEjecutarOperacionSP_ResultadoEjecucion(\"");
+            this.Write("\t\t\t\tconnection.Open();\r\n\t\t\t\tvar resultNonQuery = nonQueryCommand.ExecuteNonQuery(" +
+                    ");\r\n\t\t\t\treturn resultNonQuery;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\r\n\r\n\tpublic class Model\r\n\t{\r\n");
             
-            #line 47 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
-            
-            #line default
-            #line hidden
-            this.Write("\", listParam)\r\n\tEnd Function\r\n\r\n\r\n\tPublic Class Model\r\n");
-            
-            #line 52 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 53 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
 
 foreach(var item in dictionaryParameters)
 {
@@ -142,61 +151,34 @@ foreach(var item in dictionaryParameters)
             
             #line default
             #line hidden
-            this.Write("\t\tProperty ");
+            this.Write("\t\tpublic ");
             
-            #line 56 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
-            
-            #line default
-            #line hidden
-            this.Write(" As ");
-            
-            #line 56 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 57 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Value.Item3));
             
             #line default
             #line hidden
-            this.Write("\r\n");
+            this.Write(" ");
             
-            #line 57 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 57 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
+            
+            #line default
+            #line hidden
+            this.Write(" { get; set; }\r\n");
+            
+            #line 58 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
 
 }
 
             
             #line default
             #line hidden
-            this.Write("\tEnd Class\r\n\r\n");
-            
-            #line 62 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
- foreach(var item in dictionaryParameters) { 
-            
-            #line default
-            #line hidden
-            this.Write(" ");
-            
-            #line 62 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
-            
-            #line default
-            #line hidden
-            this.Write(" As ");
-            
-            #line 62 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(item.Value.Item3));
-            
-            #line default
-            #line hidden
-            this.Write(",  ");
-            
-            #line 62 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
- } 
-            
-            #line default
-            #line hidden
+            this.Write("\t}");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 1 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+        #line 1 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryCSHARPADOTemplate.tt"
 
 private string _procedureNameField;
 
@@ -305,7 +287,7 @@ if ((dictionaryParametersValueAcquired == false))
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    public class NonQueryVBADOTemplateBase
+    public class NonQueryCSHARPADOTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

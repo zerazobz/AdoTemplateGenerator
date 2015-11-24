@@ -12,50 +12,51 @@
 <#@ parameter name="connectionStringName" type="System.String" #>
 <#@ parameter name="dictionaryParameters" type="System.Collections.Generic.Dictionary`2[System.String,System.Tuple`3[System.String,System.Boolean, System.String]]" #>
 
-	public int NonQuery<#=procedureName#>(Model entity)
-	{
-		using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["<#=connectionStringName#>"].ConnectionString))
-        {
-            using (SqlCommand nonQueryCommand = new SqlCommand("<#=procedureName#>", connection))
-            {
-				nonQueryCommand.CommandType = CommandType.StoredProcedure;
+
+	Public Function cn<#=procedureName#>(ByVal entity As Model) As Integer
+		Return _objDatos.cd<#=procedureName#>(entity)
+	End Function
+
+	Public Function cd<#=procedureName#>(ByVal entity As Model) As Integer
+		ReDim campoParam(<#=dictionaryParameters.Count() - 1#>)
+		listParam.Clear()
+		
 <#
+int iIndex = 0;
 foreach(var item in dictionaryParameters)
 {
 	if(item.Value.Item2)
 	{
+		
 #>
-				var <#=item.Key.Substring(4)#>output = new SqlParameter("<#= item.Key #>", <#=item.Value.Item1#>)
-                {
-                    Direction = ParameterDirection.Output
-                };
-				nonQueryCommand.Parameters.Add(<#=item.Key.Substring(4)#>output);
+		'Does not exists output parameters
 <#
 	}
 	else
 	{
 #>
-				nonQueryCommand.Parameters.Add("<#= item.Key #>", <#= item.Value.Item1 #>).Value = (object)entity.<#= item.Key.Substring(4)#> ?? DBNull.Value;
+		campoParam(<#=iIndex++#>) = New SqlParameter("<#= item.Key #>", If(Not CType(entity.<#= item.Key.Substring(4)#>, Object) Is Nothing, CType(entity.<#= item.Key.Substring(4)#>, Object), DBNull.Value))
 <#
 	}
 }
 #>
-				connection.Open();
-				var resultNonQuery = nonQueryCommand.ExecuteNonQuery();
-				return resultNonQuery;
-			}
-		}
-	}
+		For Each iParam In campoParam
+            listParam.Add(iParam)
+        Next
+
+        Return _objConexion.pEjecutarOperacionSP_ResultadoEjecucion("<#=procedureName#>", listParam)
+	End Function
 
 
-	public class Model
-	{
+	Public Class Model
 <#
 foreach(var item in dictionaryParameters)
 {
 #>
-		public <#=item.Value.Item3#> <#=item.Key.Substring(4)#> { get; set; }
+		Property <#=item.Key.Substring(4)#> As <#=item.Value.Item3#>
 <#
 }
 #>
-	}
+	End Class
+
+<# foreach(var item in dictionaryParameters) { #> <#=item.Key.Substring(4)#> As <#=item.Value.Item3#>,  <# } #>
