@@ -11,76 +11,102 @@
 
 <#@ parameter name="procedureName" type="System.String" #>
 <#@ parameter name="connectionStringName" type="System.String" #>
-<#@ parameter name="dictionaryParameters" type="System.Collections.Generic.Dictionary`2[System.String,System.Tuple`2[System.String,System.Boolean]]" #>
+<#@ parameter name="dictionaryParameters" type="System.Collections.Generic.Dictionary`2[System.String,System.Tuple`3[System.String,System.Boolean, System.String]]" #>
 <#@ parameter name="dictionaryColumns" type="System.Collections.Generic.Dictionary`2[System.String,AdoTemplateGenerator.Models.ReaderColumnModel]" #>
+<#@ parameter name="parametersJoined" type="System.String" #>
 
+	''Public Function cn<#=procedureName#>(<#=String.Join(", ", dictionaryParameters.Select(kvp => $"{kvp.Key.Substring(4)} As {kvp.Value.Item3}").ToList()) #>) As Tuple(Of List(Of ResultSetModel), Integer)
+	Public Function cn<#=procedureName#>(ByVal entity As Model) As Tuple(Of List(Of ResultSetModel), Integer)
+		''Dim dtDataProcedure = _objDatos.cd<#=procedureName#>(<#=String.Join(", ", dictionaryParameters.Select(kvp => kvp.Key.Substring(4)).ToList()) #>)
+		Dim dtDataProcedure = _objDatos.cd<#=procedureName#>(entity)
+		Dim listData = New List(Of ResultSetModel)
 
-	public List<T> NonQuery<#=procedureName#>(Model entity)
-	{
-		List<T> resultSet = new List<T>();
+		For Each iRow As DataRow In dtDataProcedure.Rows
+            Dim myObj = Activator.CreateInstance(GetType(ResultSetModel))
+            For Each iPropertyInfo In myObj.GetType().GetProperties()
+                If Not iRow(iPropertyInfo.Name) Is DBNull.Value AndAlso Not Object.Equals(iRow(iPropertyInfo.Name), Nothing) Then
+                    iPropertyInfo.SetValue(myObj, iRow(iPropertyInfo.Name), Nothing)
+                End If
+            Next
+            Dim objectRecord = CType(myObj, ResultSetModel)
+            listData.Add(objectRecord)
+        Next
 
-		using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["<#=connectionStringName#>"].ConnectionString))
-        {
-            using (SqlCommand readerCommand = new SqlCommand("<#=procedureName#>", connection))
-            {
-				readerCommand.CommandType = CommandType.StoredProcedure;
+		Dim totalRows = If(listData.FirstOrDefault() Is Nothing, 0, listData.FirstOrDefault().TotRows)
+
+		Return New Tuple(Of List(Of ResultSetModel), Integer)(listData, totalRows)
+	End Function
+
+	''Public Function cd<#=procedureName#>(<#=String.Join(", ", dictionaryParameters.Select(kvp => $"{kvp.Key.Substring(4)} As {kvp.Value.Item3}").ToList()) #>) As DataTable
+	Public Function cd<#=procedureName#>(ByVal entity As Model) As DataTable
+		ReDim campoParam(<#=dictionaryParameters.Count() - 1#>)
+		listParam.Clear()
+		
 <#
+int iIndex = 0;
 foreach(var item in dictionaryParameters)
 {
 	if(item.Value.Item2)
 	{
+		
 #>
-				var <#=item.Key.Substring(4)#>output = new SqlParameter("<#= item.Key #>", <#=item.Value.Item1#>)
-                {
-                    Direction = ParameterDirection.Output
-                };
-				readerCommand.Parameters.Add(<#=item.Key.Substring(4)#>output);
+		'Does not exists output parameters
 <#
 	}
 	else
 	{
 #>
-				readerCommand.Parameters.Add("<#= item.Key #>", <#= item.Value.Item1 #>).Value = (object)entity.<#= item.Key.Substring(4)#> ?? DBNull.Value;
+		campoParam(<#=iIndex++#>) = New SqlParameter("<#= item.Key #>", If(Not CType(entity.<#= item.Key.Substring(4)#>, Object) Is Nothing, CType(entity.<#= item.Key.Substring(4)#>, Object), DBNull.Value))
 <#
 	}
 }
 #>
-				connection.Open();
-				using (var reader = selectCommand.ExecuteReader())
-                {
-					T obj = default(T);
-					while (reader.Read())
-                    {
-						obj = Activator.CreateInstance<T>();
-						foreach (PropertyInfo prop in obj.GetType().GetProperties())
-						{
-							if (!object.Equals(reader[prop.Name], DBNull.Value))
-							{
-								prop.SetValue(obj, reader[prop.Name], null);
-							}
-						}
-						resultSet.Add(obj);
-					}
-				}
-				return resultSet;
-			}
-		}
-	}
+		For Each iParam In campoParam
+            listParam.Add(iParam)
+        Next
+
+        Return _objConexion.fdtEjecutarConsultaSP_ConParametros("<#=procedureName#>", listParam)
+	End Function
 
 
-	
-	public class ResultSetModel
-	{
+	Public Class Model
 <#
-foreach(var iKeyValuePairColumnInfo in dictionaryColumns)
+foreach(var item in dictionaryParameters)
 {
 #>
-		public <#=iKeyValuePairColumnInfo.Value.DataTypeFullName#> <#=iKeyValuePairColumnInfo.Key#> { get; set; }
+		Property <#=item.Key.Substring(4)#> As <#=item.Value.Item3#>
 <#
 }
 #>
-	}
-	
+	End Class
+
+	Public Class ResultSetModel
+<#
+foreach(var iColumn in dictionaryColumns)
+{
+#>
+		Property <#=iColumn.Key#> As <#=iColumn.Value.DataTypeFullName#>
+<#
+}
+#>
+	End Class
+
+
+<# foreach(var item in dictionaryParameters) { #> <#=item.Key.Substring(4)#> As <#=item.Value.Item3#>, <# } #>
+
+<# foreach(var item in dictionaryParameters) { #> <#=item.Key.Substring(4)#>, <# } #>
+
+<form>
+
+<#foreach(var item in dictionaryColumns)
+  {#>
+  <input type="text" name="<#= item.Key #>" />
+
+<#
+  }
+#>
+</form>
+
 	$("#").jtable({
 		title: '<#=procedureName#>',
 		paging: true,
@@ -91,7 +117,7 @@ foreach(var iKeyValuePairColumnInfo in dictionaryColumns)
 			listAction: '',
 			createAction: '',
 			editAction: '',
-			deleteAction: '',
+			deleteAction: ''
 		},
 		fields: {
 <#
@@ -109,7 +135,7 @@ for (int i = 0; i < dictionaryColumns.Count; i++)
 			},
 <#
 	}
-	else if(i < dictionaryColumns.Count)
+	else if(i < dictionaryColumns.Count - 1)
 	{
 #>
 			<#=kvp.Key#>: {

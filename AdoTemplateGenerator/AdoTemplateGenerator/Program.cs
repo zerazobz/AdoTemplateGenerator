@@ -88,7 +88,7 @@ namespace AdoTemplateGenerator
         private static string GetReaderResult(string connectionStringName, string storedProcedureName)
         {
             var readerResult = GetReaderColumnsDictionary(connectionStringName, storedProcedureName);
-            Dictionary<string, Tuple<string, bool>> parametersToMap = readerResult.Item1.Select(prmKVP => new KeyValuePair<string, Tuple<string, bool>>(prmKVP.Key, new Tuple<string, bool>(prmKVP.Value.Item1.GetFullName(), prmKVP.Value.Item2))).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            Dictionary<string, Tuple<string, bool,string>> parametersToMap = readerResult.Item1.Select(prmKVP => new KeyValuePair<string, Tuple<string, bool, string>>(prmKVP.Key, new Tuple<string, bool, string>(prmKVP.Value.Item1.GetFullName(), prmKVP.Value.Item2, prmKVP.Value.Item3))).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             string resulTemplate = String.Empty;
 
             if (bracketsLanguage == "vb")//open closed? factory?
@@ -99,6 +99,7 @@ namespace AdoTemplateGenerator
                 textTemplate.Session["connectionStringName"] = connectionStringName;
                 textTemplate.Session["dictionaryParameters"] = parametersToMap;
                 textTemplate.Session["dictionaryColumns"] = readerResult.Item2;
+                textTemplate.Session["parametersJoined"] = String.Join(", ", parametersToMap.Select(kvp => kvp.Key.Substring(4)).ToList());
                 textTemplate.Initialize();
                 resulTemplate = textTemplate.TransformText();
             }
@@ -110,6 +111,7 @@ namespace AdoTemplateGenerator
                 textTemplate.Session["connectionStringName"] = connectionStringName;
                 textTemplate.Session["dictionaryParameters"] = parametersToMap;
                 textTemplate.Session["dictionaryColumns"] = readerResult.Item2;
+                textTemplate.Session["parametersJoined"] = String.Join(", ", parametersToMap.Select(kvp => kvp.Key.Substring(4)).ToList());
                 textTemplate.Initialize();
                 resulTemplate = textTemplate.TransformText();
             }

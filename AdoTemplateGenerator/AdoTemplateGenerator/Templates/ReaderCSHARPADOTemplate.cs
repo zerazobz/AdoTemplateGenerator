@@ -22,7 +22,7 @@ namespace AdoTemplateGenerator.Templates
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+    #line 1 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
     public partial class ReaderCSHARPADOTemplate : ReaderCSHARPADOTemplateBase
     {
@@ -34,9 +34,9 @@ namespace AdoTemplateGenerator.Templates
         {
             this.Write("\r\n");
             this.Write("\r\n");
-            this.Write("\r\n\r\n\tpublic List<T> NonQuery");
+            this.Write("\r\n\tpublic List<T> NonQuery");
             
-            #line 18 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 18 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
             
             #line default
@@ -44,7 +44,7 @@ namespace AdoTemplateGenerator.Templates
             this.Write("(Model entity)\r\n\t{\r\n\t\tList<T> resultSet = new List<T>();\r\n\r\n\t\tusing (SqlConnectio" +
                     "n connection = new SqlConnection(ConfigurationManager.ConnectionStrings[\"");
             
-            #line 22 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 22 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(connectionStringName));
             
             #line default
@@ -52,7 +52,7 @@ namespace AdoTemplateGenerator.Templates
             this.Write("\"].ConnectionString))\r\n        {\r\n            using (SqlCommand readerCommand = n" +
                     "ew SqlCommand(\"");
             
-            #line 24 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 24 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
             
             #line default
@@ -60,7 +60,7 @@ namespace AdoTemplateGenerator.Templates
             this.Write("\", connection))\r\n            {\r\n\t\t\t\treaderCommand.CommandType = CommandType.Store" +
                     "dProcedure;\r\n");
             
-            #line 27 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 27 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
 
 foreach(var item in dictionaryParameters)
 {
@@ -72,21 +72,21 @@ foreach(var item in dictionaryParameters)
             #line hidden
             this.Write("\t\t\t\tvar ");
             
-            #line 33 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 33 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
             
             #line default
             #line hidden
             this.Write("output = new SqlParameter(\"");
             
-            #line 33 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 33 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Key));
             
             #line default
             #line hidden
             this.Write("\", ");
             
-            #line 33 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 33 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Value.Item1));
             
             #line default
@@ -94,14 +94,14 @@ foreach(var item in dictionaryParameters)
             this.Write(")\r\n                {\r\n                    Direction = ParameterDirection.Output\r\n" +
                     "                };\r\n\t\t\t\treaderCommand.Parameters.Add(");
             
-            #line 37 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 37 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
             
             #line default
             #line hidden
             this.Write("output);\r\n");
             
-            #line 38 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 38 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
 
 	}
 	else
@@ -112,28 +112,28 @@ foreach(var item in dictionaryParameters)
             #line hidden
             this.Write("\t\t\t\treaderCommand.Parameters.Add(\"");
             
-            #line 43 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 43 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Key));
             
             #line default
             #line hidden
             this.Write("\", ");
             
-            #line 43 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 43 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Value.Item1));
             
             #line default
             #line hidden
             this.Write(").Value = (object)entity.");
             
-            #line 43 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 43 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
             
             #line default
             #line hidden
             this.Write(" ?? DBNull.Value;\r\n");
             
-            #line 44 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 44 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
 
 	}
 }
@@ -169,7 +169,7 @@ foreach(var item in dictionaryParameters)
 	{
 ");
             
-            #line 74 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 74 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
 
 foreach(var iKeyValuePairColumnInfo in dictionaryColumns)
 {
@@ -179,21 +179,21 @@ foreach(var iKeyValuePairColumnInfo in dictionaryColumns)
             #line hidden
             this.Write("\t\tpublic ");
             
-            #line 78 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 78 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(iKeyValuePairColumnInfo.Value.DataTypeFullName));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 78 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 78 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(iKeyValuePairColumnInfo.Key));
             
             #line default
             #line hidden
             this.Write(" { get; set; }\r\n");
             
-            #line 79 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 79 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
 
 }
 
@@ -202,7 +202,7 @@ foreach(var iKeyValuePairColumnInfo in dictionaryColumns)
             #line hidden
             this.Write("\t}\r\n\t\r\n\t$(\"#\").jtable({\r\n\t\ttitle: \'");
             
-            #line 85 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 85 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
             
             #line default
@@ -210,7 +210,7 @@ foreach(var iKeyValuePairColumnInfo in dictionaryColumns)
             this.Write("\',\r\n\t\tpaging: true,\r\n        pageSize: 10,\r\n        sorting: true,\r\n        defau" +
                     "ltSorting: \'");
             
-            #line 89 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 89 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dictionaryColumns.Select(kvp => kvp.Key).FirstOrDefault()));
             
             #line default
@@ -218,7 +218,7 @@ foreach(var iKeyValuePairColumnInfo in dictionaryColumns)
             this.Write(" ASC\',\r\n\t\tactions: {\r\n\t\t\tlistAction: \'\',\r\n\t\t\tcreateAction: \'\',\r\n\t\t\teditAction: \'\'" +
                     ",\r\n\t\t\tdeleteAction: \'\',\r\n\t\t},\r\n\t\tfields: {\r\n");
             
-            #line 97 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 97 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
 
 for (int i = 0; i < dictionaryColumns.Count; i++)
 {
@@ -231,7 +231,7 @@ for (int i = 0; i < dictionaryColumns.Count; i++)
             #line hidden
             this.Write("\t\t\t");
             
-            #line 104 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 104 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(kvp.Key));
             
             #line default
@@ -239,10 +239,10 @@ for (int i = 0; i < dictionaryColumns.Count; i++)
             this.Write(": {\r\n\t\t\t\tkey: true,\r\n\t\t\t\tlist: false,\r\n\t\t\t\tedit: false,\r\n\t\t\t\tcreate: false\r\n\t\t\t}," +
                     "\r\n");
             
-            #line 110 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 110 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
 
 	}
-	else if(i < dictionaryColumns.Count)
+	else if(i < dictionaryColumns.Count - 1)
 	{
 
             
@@ -250,21 +250,21 @@ for (int i = 0; i < dictionaryColumns.Count; i++)
             #line hidden
             this.Write("\t\t\t");
             
-            #line 115 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 115 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(kvp.Key));
             
             #line default
             #line hidden
             this.Write(": {\r\n\t\t\t\ttitle: \'");
             
-            #line 116 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 116 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(kvp.Key));
             
             #line default
             #line hidden
             this.Write("\',\r\n\t\t\t\tlist: false,\r\n\t\t\t\tedit: false,\r\n\t\t\t\tcreate: false\r\n\t\t\t},\r\n");
             
-            #line 121 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 121 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
 
     }
 	else
@@ -275,21 +275,21 @@ for (int i = 0; i < dictionaryColumns.Count; i++)
             #line hidden
             this.Write("\t\t\t");
             
-            #line 126 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 126 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(kvp.Key));
             
             #line default
             #line hidden
             this.Write(": {\r\n\t\t\t\ttitle: \'");
             
-            #line 127 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 127 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(kvp.Key));
             
             #line default
             #line hidden
             this.Write("\',\r\n\t\t\t\tlist: false,\r\n\t\t\t\tedit: false,\r\n\t\t\t\tcreate: false\r\n\t\t\t}\r\n");
             
-            #line 132 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+            #line 132 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
 
     }
 }
@@ -301,7 +301,7 @@ for (int i = 0; i < dictionaryColumns.Count; i++)
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 1 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
+        #line 1 "C:\Users\Erick\Documents\Neo\Tools\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\ReaderCSHARPADOTemplate.tt"
 
 private string _procedureNameField;
 
@@ -329,12 +329,12 @@ private string connectionStringName
     }
 }
 
-private global::System.Collections.Generic.Dictionary<string, System.Tuple<string, bool>> _dictionaryParametersField;
+private global::System.Collections.Generic.Dictionary<string, System.Tuple<string, bool, string>> _dictionaryParametersField;
 
 /// <summary>
 /// Access the dictionaryParameters parameter of the template.
 /// </summary>
-private global::System.Collections.Generic.Dictionary<string, System.Tuple<string, bool>> dictionaryParameters
+private global::System.Collections.Generic.Dictionary<string, System.Tuple<string, bool, string>> dictionaryParameters
 {
     get
     {
@@ -352,6 +352,19 @@ private global::System.Collections.Generic.Dictionary<string, AdoTemplateGenerat
     get
     {
         return this._dictionaryColumnsField;
+    }
+}
+
+private string _parametersJoinedField;
+
+/// <summary>
+/// Access the parametersJoined parameter of the template.
+/// </summary>
+private string parametersJoined
+{
+    get
+    {
+        return this._parametersJoinedField;
     }
 }
 
@@ -394,7 +407,7 @@ if ((connectionStringNameValueAcquired == false))
 bool dictionaryParametersValueAcquired = false;
 if (this.Session.ContainsKey("dictionaryParameters"))
 {
-    this._dictionaryParametersField = ((global::System.Collections.Generic.Dictionary<string, System.Tuple<string, bool>>)(this.Session["dictionaryParameters"]));
+    this._dictionaryParametersField = ((global::System.Collections.Generic.Dictionary<string, System.Tuple<string, bool, string>>)(this.Session["dictionaryParameters"]));
     dictionaryParametersValueAcquired = true;
 }
 if ((dictionaryParametersValueAcquired == false))
@@ -402,7 +415,7 @@ if ((dictionaryParametersValueAcquired == false))
     object data = global::System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("dictionaryParameters");
     if ((data != null))
     {
-        this._dictionaryParametersField = ((global::System.Collections.Generic.Dictionary<string, System.Tuple<string, bool>>)(data));
+        this._dictionaryParametersField = ((global::System.Collections.Generic.Dictionary<string, System.Tuple<string, bool, string>>)(data));
     }
 }
 bool dictionaryColumnsValueAcquired = false;
@@ -417,6 +430,20 @@ if ((dictionaryColumnsValueAcquired == false))
     if ((data != null))
     {
         this._dictionaryColumnsField = ((global::System.Collections.Generic.Dictionary<string, AdoTemplateGenerator.Models.ReaderColumnModel>)(data));
+    }
+}
+bool parametersJoinedValueAcquired = false;
+if (this.Session.ContainsKey("parametersJoined"))
+{
+    this._parametersJoinedField = ((string)(this.Session["parametersJoined"]));
+    parametersJoinedValueAcquired = true;
+}
+if ((parametersJoinedValueAcquired == false))
+{
+    object data = global::System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("parametersJoined");
+    if ((data != null))
+    {
+        this._parametersJoinedField = ((string)(data));
     }
 }
 

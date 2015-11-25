@@ -11,9 +11,9 @@
 
 <#@ parameter name="procedureName" type="System.String" #>
 <#@ parameter name="connectionStringName" type="System.String" #>
-<#@ parameter name="dictionaryParameters" type="System.Collections.Generic.Dictionary`2[System.String,System.Tuple`2[System.String,System.Boolean]]" #>
+<#@ parameter name="dictionaryParameters" type="System.Collections.Generic.Dictionary`2[System.String,System.Tuple`3[System.String,System.Boolean, System.String]]" #>
 <#@ parameter name="dictionaryColumns" type="System.Collections.Generic.Dictionary`2[System.String,AdoTemplateGenerator.Models.ReaderColumnModel]" #>
-
+<#@ parameter name="parametersJoined" type="System.String" #>
 
 	public List<T> NonQuery<#=procedureName#>(Model entity)
 	{
@@ -109,7 +109,7 @@ for (int i = 0; i < dictionaryColumns.Count; i++)
 			},
 <#
 	}
-	else if(i < dictionaryColumns.Count)
+	else if(i < dictionaryColumns.Count - 1)
 	{
 #>
 			<#=kvp.Key#>: {
