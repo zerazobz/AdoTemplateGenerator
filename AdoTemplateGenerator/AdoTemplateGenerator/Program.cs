@@ -18,6 +18,8 @@ namespace AdoTemplateGenerator
 {
     class Program
     {
+        private static string bracketsLanguage = String.Empty;
+
         static void Main(string[] args)
         {
             Console.Title = "Generating SLQ/Model/JTable Mapping";
@@ -28,7 +30,8 @@ namespace AdoTemplateGenerator
             }
             string connectionStringName = "ConnectionString";
             string storedProcedureName = args.GetValue(0).ToString();
-            string typeTemplate = args.GetValue(1).ToString();
+            bracketsLanguage = args.GetValue(1).ToString();
+            string typeTemplate = args.GetValue(2).ToString();
 
             string textResult = String.Empty;
 
@@ -58,14 +61,27 @@ namespace AdoTemplateGenerator
         {
             var parametersDictionary = GetStoredProcedureParametersDictionary(connectionStringName, storedProcedureName);
             Dictionary<string, Tuple<string, bool, string>> parametersToMap = parametersDictionary.Select(prmKVP => new KeyValuePair<string, Tuple<string, bool, string>>(prmKVP.Key, new Tuple<string, bool, string>(prmKVP.Value.Item1.GetFullName(), prmKVP.Value.Item2, prmKVP.Value.Item3))).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-
-            NonQueryVBADOTemplate textTemplate = new NonQueryVBADOTemplate();
-            textTemplate.Session = new Microsoft.VisualStudio.TextTemplating.TextTemplatingSession();
-            textTemplate.Session["procedureName"] = storedProcedureName;
-            textTemplate.Session["connectionStringName"] = connectionStringName;
-            textTemplate.Session["dictionaryParameters"] = parametersToMap;
-            textTemplate.Initialize();
-            var resultTemplate = textTemplate.TransformText();
+            string resultTemplate = String.Empty;
+            if(bracketsLanguage == "vb")
+            {
+                NonQueryVBADOTemplate textTemplate = new NonQueryVBADOTemplate();
+                textTemplate.Session = new Microsoft.VisualStudio.TextTemplating.TextTemplatingSession();
+                textTemplate.Session["procedureName"] = storedProcedureName;
+                textTemplate.Session["connectionStringName"] = connectionStringName;
+                textTemplate.Session["dictionaryParameters"] = parametersToMap;
+                textTemplate.Initialize();
+                resultTemplate = textTemplate.TransformText();
+            }
+            else
+            {
+                NonQueryCSHARPADOTemplate textTemplate = new NonQueryCSHARPADOTemplate();
+                textTemplate.Session = new Microsoft.VisualStudio.TextTemplating.TextTemplatingSession();
+                textTemplate.Session["procedureName"] = storedProcedureName;
+                textTemplate.Session["connectionStringName"] = connectionStringName;
+                textTemplate.Session["dictionaryParameters"] = parametersToMap;
+                textTemplate.Initialize();
+                resultTemplate = textTemplate.TransformText();
+            }
             return resultTemplate;
         }
 
@@ -73,15 +89,30 @@ namespace AdoTemplateGenerator
         {
             var readerResult = GetReaderColumnsDictionary(connectionStringName, storedProcedureName);
             Dictionary<string, Tuple<string, bool>> parametersToMap = readerResult.Item1.Select(prmKVP => new KeyValuePair<string, Tuple<string, bool>>(prmKVP.Key, new Tuple<string, bool>(prmKVP.Value.Item1.GetFullName(), prmKVP.Value.Item2))).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            string resulTemplate = String.Empty;
 
-            ReaderVBADOTemplate textTemplate = new ReaderVBADOTemplate();
-            textTemplate.Session = new Microsoft.VisualStudio.TextTemplating.TextTemplatingSession();
-            textTemplate.Session["procedureName"] = storedProcedureName;
-            textTemplate.Session["connectionStringName"] = connectionStringName;
-            textTemplate.Session["dictionaryParameters"] = parametersToMap;
-            textTemplate.Session["dictionaryColumns"] = readerResult.Item2;
-            textTemplate.Initialize();
-            var resulTemplate = textTemplate.TransformText();
+            if (bracketsLanguage == "vb")//open closed? factory?
+            {
+                ReaderVBADOTemplate textTemplate = new ReaderVBADOTemplate();
+                textTemplate.Session = new Microsoft.VisualStudio.TextTemplating.TextTemplatingSession();
+                textTemplate.Session["procedureName"] = storedProcedureName;
+                textTemplate.Session["connectionStringName"] = connectionStringName;
+                textTemplate.Session["dictionaryParameters"] = parametersToMap;
+                textTemplate.Session["dictionaryColumns"] = readerResult.Item2;
+                textTemplate.Initialize();
+                resulTemplate = textTemplate.TransformText();
+            }
+            else if(bracketsLanguage == "cs")
+            {
+                ReaderCSHARPADOTemplate textTemplate = new ReaderCSHARPADOTemplate();
+                textTemplate.Session = new Microsoft.VisualStudio.TextTemplating.TextTemplatingSession();
+                textTemplate.Session["procedureName"] = storedProcedureName;
+                textTemplate.Session["connectionStringName"] = connectionStringName;
+                textTemplate.Session["dictionaryParameters"] = parametersToMap;
+                textTemplate.Session["dictionaryColumns"] = readerResult.Item2;
+                textTemplate.Initialize();
+                resulTemplate = textTemplate.TransformText();
+            }
             return resulTemplate;
         }
 
@@ -134,10 +165,16 @@ namespace AdoTemplateGenerator
                             var underLyingType = Nullable.GetUnderlyingType(dataType);
                             if(underLyingType != null)
                             {
-                                //dataTypeFullName = $"System.Nullable<{underLyingType.FullName}>";
-                                //dataTypeName = $"Nullable<{underLyingType.Name}>";
-                                dataTypeFullName = $"System.Nullable(Of {underLyingType.FullName})";
-                                dataTypeName = $"Nullable(Of {underLyingType.Name})";
+                                if(bracketsLanguage == "cs")
+                                {
+                                    dataTypeFullName = $"System.Nullable<{underLyingType.FullName}>";
+                                    dataTypeName = $"Nullable<{underLyingType.Name}>";
+                                }
+                                else if(bracketsLanguage == "vb")
+                                {
+                                    dataTypeFullName = $"System.Nullable(Of {underLyingType.FullName})";
+                                    dataTypeName = $"Nullable(Of {underLyingType.Name})";
+                                }
                             }
                             else
                             {
@@ -218,8 +255,12 @@ namespace AdoTemplateGenerator
                 var dataTypeCompleteName = String.Empty;
                 var underLyingType = Nullable.GetUnderlyingType(clrType);
                 if (underLyingType != null)
-                    dataTypeCompleteName = $"System.Nullable(Of {underLyingType.FullName})";
-                //dataTypeCompleteName = $"System.Nullable<{underLyingType.FullName}>";
+                {
+                    if(bracketsLanguage == "vb")
+                        dataTypeCompleteName = $"System.Nullable(Of {underLyingType.FullName})";
+                    else
+                        dataTypeCompleteName = dataTypeCompleteName = $"System.Nullable<{underLyingType.FullName}>";
+                }
                 else
                     dataTypeCompleteName = clrType.FullName;
 
