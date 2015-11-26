@@ -33,7 +33,7 @@ namespace AdoTemplateGenerator.Templates
         {
             this.Write("\r\n");
             this.Write("\r\n");
-            this.Write("\r\n\t\'\'Public Function cn");
+            this.Write("\r\n\t\'Public Function cn");
             
             #line 15 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
@@ -54,7 +54,7 @@ namespace AdoTemplateGenerator.Templates
             
             #line default
             #line hidden
-            this.Write("(ByVal entity As Model) As Integer\r\n\t\t\'\'Return _objDatos.cd");
+            this.Write("(ByVal entity As Model) As Integer\r\n\t\t\'Return _objDatos.cd");
             
             #line 17 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
@@ -75,7 +75,7 @@ namespace AdoTemplateGenerator.Templates
             
             #line default
             #line hidden
-            this.Write("(entity)\r\n\tEnd Function\r\n\r\n\t\'\'Public Function cd");
+            this.Write("(entity)\r\n\tEnd Function\r\n\r\n\t\'Public Function cd");
             
             #line 21 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
