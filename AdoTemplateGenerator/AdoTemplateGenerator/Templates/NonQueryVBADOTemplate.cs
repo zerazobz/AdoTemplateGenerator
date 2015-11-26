@@ -33,37 +33,79 @@ namespace AdoTemplateGenerator.Templates
         {
             this.Write("\r\n");
             this.Write("\r\n");
-            this.Write("\r\n\r\n\tPublic Function cn");
+            this.Write("\r\n\t\'\'Public Function cn");
+            
+            #line 15 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
+            
+            #line default
+            #line hidden
+            this.Write("(");
+            
+            #line 15 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(String.Join(", ", dictionaryParameters.Select(kvp => $"{kvp.Key.Substring(4)} As {kvp.Value.Item3}").ToList())));
+            
+            #line default
+            #line hidden
+            this.Write(") As Integer\r\n\tPublic Function cn");
             
             #line 16 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
             
             #line default
             #line hidden
-            this.Write("(ByVal entity As Model) As Integer\r\n\t\tReturn _objDatos.cd");
+            this.Write("(ByVal entity As Model) As Integer\r\n\t\t\'\'Return _objDatos.cd");
             
             #line 17 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
             
             #line default
             #line hidden
-            this.Write("(entity)\r\n\tEnd Function\r\n\r\n\tPublic Function cd");
+            this.Write("(");
             
-            #line 20 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 17 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(String.Join(", ", dictionaryParameters.Select(kvp => kvp.Key.Substring(4)).ToList())));
+            
+            #line default
+            #line hidden
+            this.Write(")\r\n\t\tReturn _objDatos.cd");
+            
+            #line 18 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
+            
+            #line default
+            #line hidden
+            this.Write("(entity)\r\n\tEnd Function\r\n\r\n\t\'\'Public Function cd");
+            
+            #line 21 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
+            
+            #line default
+            #line hidden
+            this.Write("(");
+            
+            #line 21 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(String.Join(", ", dictionaryParameters.Select(kvp => $"{kvp.Key.Substring(4)} As {kvp.Value.Item3}").ToList())));
+            
+            #line default
+            #line hidden
+            this.Write(") As Integer\r\n\tPublic Function cd");
+            
+            #line 22 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
             
             #line default
             #line hidden
             this.Write("(ByVal entity As Model) As Integer\r\n\t\tReDim campoParam(");
             
-            #line 21 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 23 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dictionaryParameters.Count() - 1));
             
             #line default
             #line hidden
             this.Write(")\r\n\t\tlistParam.Clear()\r\n\t\t\r\n");
             
-            #line 24 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 26 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
 
 int iIndex = 0;
 foreach(var item in dictionaryParameters)
@@ -77,7 +119,7 @@ foreach(var item in dictionaryParameters)
             #line hidden
             this.Write("\t\t\'Does not exists output parameters\r\n");
             
-            #line 33 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 35 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
 
 	}
 	else
@@ -88,35 +130,35 @@ foreach(var item in dictionaryParameters)
             #line hidden
             this.Write("\t\tcampoParam(");
             
-            #line 38 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 40 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(iIndex++));
             
             #line default
             #line hidden
             this.Write(") = New SqlParameter(\"");
             
-            #line 38 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 40 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Key));
             
             #line default
             #line hidden
             this.Write("\", If(Not CType(entity.");
             
-            #line 38 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 40 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
             
             #line default
             #line hidden
             this.Write(", Object) Is Nothing, CType(entity.");
             
-            #line 38 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 40 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
             
             #line default
             #line hidden
             this.Write(", Object), DBNull.Value))\r\n");
             
-            #line 39 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 41 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
 
 	}
 }
@@ -127,14 +169,14 @@ foreach(var item in dictionaryParameters)
             this.Write("\t\tFor Each iParam In campoParam\r\n            listParam.Add(iParam)\r\n        Next\r" +
                     "\n\r\n        Return _objConexion.pEjecutarOperacionSP_ResultadoEjecucion(\"");
             
-            #line 47 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 49 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(procedureName));
             
             #line default
             #line hidden
             this.Write("\", listParam)\r\n\tEnd Function\r\n\r\n\r\n\tPublic Class Model\r\n");
             
-            #line 52 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 54 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
 
 foreach(var item in dictionaryParameters)
 {
@@ -144,21 +186,21 @@ foreach(var item in dictionaryParameters)
             #line hidden
             this.Write("\t\tProperty ");
             
-            #line 56 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 58 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
             
             #line default
             #line hidden
             this.Write(" As ");
             
-            #line 56 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 58 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Value.Item3));
             
             #line default
             #line hidden
             this.Write("\r\n");
             
-            #line 57 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 59 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
 
 }
 
@@ -167,29 +209,42 @@ foreach(var item in dictionaryParameters)
             #line hidden
             this.Write("\tEnd Class\r\n\r\n");
             
-            #line 62 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 64 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
  foreach(var item in dictionaryParameters) { 
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 62 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 64 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Key.Substring(4)));
             
             #line default
             #line hidden
             this.Write(" As ");
             
-            #line 62 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 64 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Value.Item3));
             
             #line default
             #line hidden
             this.Write(",  ");
             
-            #line 62 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            #line 64 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
  } 
+            
+            #line default
+            #line hidden
+            
+            #line 65 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(String.Join(", ", dictionaryParameters.Select(kvp => kvp.Key.Substring(3)).ToList())));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n");
+            
+            #line 66 "C:\Development\Neo\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\AdoTemplateGenerator\Templates\NonQueryVBADOTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(String.Join(", ", dictionaryParameters.Select(kvp => $"{kvp.Key.Substring(4)} As {kvp.Value.Item3}").ToList())));
             
             #line default
             #line hidden

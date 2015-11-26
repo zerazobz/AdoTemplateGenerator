@@ -64,6 +64,7 @@ namespace AdoTemplateGenerator
             string resultTemplate = String.Empty;
             if(bracketsLanguage == "vb")
             {
+                //var parametersJoined = String.Join(", ", parametersToMap.Select(kvp => kvp.Key.Substring(3)).ToList());
                 NonQueryVBADOTemplate textTemplate = new NonQueryVBADOTemplate();
                 textTemplate.Session = new Microsoft.VisualStudio.TextTemplating.TextTemplatingSession();
                 textTemplate.Session["procedureName"] = storedProcedureName;

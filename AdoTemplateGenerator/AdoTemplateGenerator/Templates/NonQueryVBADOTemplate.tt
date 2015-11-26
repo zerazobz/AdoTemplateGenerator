@@ -12,11 +12,13 @@
 <#@ parameter name="connectionStringName" type="System.String" #>
 <#@ parameter name="dictionaryParameters" type="System.Collections.Generic.Dictionary`2[System.String,System.Tuple`3[System.String,System.Boolean, System.String]]" #>
 
-
+	''Public Function cn<#=procedureName#>(<#=String.Join(", ", dictionaryParameters.Select(kvp => $"{kvp.Key.Substring(4)} As {kvp.Value.Item3}").ToList()) #>) As Integer
 	Public Function cn<#=procedureName#>(ByVal entity As Model) As Integer
+		''Return _objDatos.cd<#=procedureName#>(<#=String.Join(", ", dictionaryParameters.Select(kvp => kvp.Key.Substring(4)).ToList()) #>)
 		Return _objDatos.cd<#=procedureName#>(entity)
 	End Function
 
+	''Public Function cd<#=procedureName#>(<#=String.Join(", ", dictionaryParameters.Select(kvp => $"{kvp.Key.Substring(4)} As {kvp.Value.Item3}").ToList()) #>) As Integer
 	Public Function cd<#=procedureName#>(ByVal entity As Model) As Integer
 		ReDim campoParam(<#=dictionaryParameters.Count() - 1#>)
 		listParam.Clear()
@@ -60,3 +62,5 @@ foreach(var item in dictionaryParameters)
 	End Class
 
 <# foreach(var item in dictionaryParameters) { #> <#=item.Key.Substring(4)#> As <#=item.Value.Item3#>,  <# } #>
+<#=String.Join(", ", dictionaryParameters.Select(kvp => kvp.Key.Substring(3)).ToList()) #>
+<#=String.Join(", ", dictionaryParameters.Select(kvp => $"{kvp.Key.Substring(4)} As {kvp.Value.Item3}").ToList()) #>
