@@ -15,16 +15,26 @@
 <#@ parameter name="dictionaryColumns" type="System.Collections.Generic.Dictionary`2[System.String,AdoTemplateGenerator.Models.ReaderColumnModel]" #>
 <#@ parameter name="parametersJoined" type="System.String" #>
 
-	''Public Function cn<#=procedureName#>(<#=String.Join(", ", dictionaryParameters.Select(kvp => $"{kvp.Key.Substring(4)} As {kvp.Value.Item3}").ToList()) #>) As Tuple(Of List(Of ResultSetModel), Integer)
+
+	Module DataRowExtensions
+
+		<System.Runtime.CompilerServices.Extension> _
+        Public Function CheckIfColumnExistAndNotDBNull(row As DataRow, column As String) As Boolean
+            Return If(row.Table.Columns.Contains(column) AndAlso row(column) <> DBNull.Value, True, False)
+        End Function
+
+    End Module
+
+	'Public Function cn<#=procedureName#>(<#=String.Join(", ", dictionaryParameters.Select(kvp => $"{kvp.Key.Substring(4)} As {kvp.Value.Item3}").ToList()) #>) As Tuple(Of List(Of ResultSetModel), Integer)
 	Public Function cn<#=procedureName#>(ByVal entity As Model) As Tuple(Of List(Of ResultSetModel), Integer)
-		''Dim dtDataProcedure = _objDatos.cd<#=procedureName#>(<#=String.Join(", ", dictionaryParameters.Select(kvp => kvp.Key.Substring(4)).ToList()) #>)
+		'Dim dtDataProcedure = _objDatos.cd<#=procedureName#>(<#=String.Join(", ", dictionaryParameters.Select(kvp => kvp.Key.Substring(4)).ToList()) #>)
 		Dim dtDataProcedure = _objDatos.cd<#=procedureName#>(entity)
 		Dim listData = New List(Of ResultSetModel)
 
 		For Each iRow As DataRow In dtDataProcedure.Rows
             Dim myObj = Activator.CreateInstance(GetType(ResultSetModel))
             For Each iPropertyInfo In myObj.GetType().GetProperties()
-                If Not iRow(iPropertyInfo.Name) Is DBNull.Value AndAlso Not Object.Equals(iRow(iPropertyInfo.Name), Nothing) Then
+                If iRow.CheckIfColumnExistAndNotDBNull(iPropertyInfo.Name) AndAlso Not Object.Equals(iRow(iPropertyInfo.Name), Nothing) Then
                     iPropertyInfo.SetValue(myObj, iRow(iPropertyInfo.Name), Nothing)
                 End If
             Next
@@ -37,7 +47,7 @@
 		Return New Tuple(Of List(Of ResultSetModel), Integer)(listData, totalRows)
 	End Function
 
-	''Public Function cd<#=procedureName#>(<#=String.Join(", ", dictionaryParameters.Select(kvp => $"{kvp.Key.Substring(4)} As {kvp.Value.Item3}").ToList()) #>) As DataTable
+	'Public Function cd<#=procedureName#>(<#=String.Join(", ", dictionaryParameters.Select(kvp => $"{kvp.Key.Substring(4)} As {kvp.Value.Item3}").ToList()) #>) As DataTable
 	Public Function cd<#=procedureName#>(ByVal entity As Model) As DataTable
 		ReDim campoParam(<#=dictionaryParameters.Count() - 1#>)
 		listParam.Clear()
@@ -161,6 +171,3 @@ for (int i = 0; i < dictionaryColumns.Count; i++)
 #>
 		}
 	});
-
-
-
